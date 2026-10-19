@@ -967,6 +967,8 @@ public class EhDB {
                     return false;
                 if (!copyDao(sDaoSession.getFilterDao(), exportSession.getFilterDao()))
                     return false;
+                if (!copyDao(sDaoSession.getGalleryTagsDao(), exportSession.getGalleryTagsDao()))
+                    return false;
             }
 
             // Copy export db to data dir
@@ -1080,9 +1082,10 @@ public class EhDB {
             }
 
             List<GalleryTags> galleryTagsList = session.getGalleryTagsDao().queryBuilder().list();
-            List<GalleryTags> currentGalleryTags = sDaoSession.getGalleryTagsDao().queryBuilder().list();
             for (GalleryTags tags : galleryTagsList) {
-                if (!currentGalleryTags.contains(tags)) {
+                if (inGalleryTags(tags.gid)) {
+                    updateGalleryTags(tags);
+                } else {
                     insertGalleryTags(tags);
                 }
             }
