@@ -1177,6 +1177,9 @@ public class DownloadsScene extends ToolbarScene
             mRecyclerView.setVisibility(View.VISIBLE);
         }
         searching = false;
+        updateTitle();
+        mPaginationController.updatePaginationIndicator();
+        updateView();
         mPaginationController.queryUnreadSpiderInfo();
     }
 
@@ -1216,25 +1219,6 @@ public class DownloadsScene extends ToolbarScene
     }
 
     private void filterByCategory() {
-        if (mBackList == null) {
-            return;
-        }
-        if (mSelectedCategory == EhUtils.ALL_CATEGORY) {
-            mList = new ArrayList<>(mBackList);
-        } else {
-            mList = new ArrayList<>();
-            for (DownloadInfo info : mBackList) {
-                if (info.category == mSelectedCategory) {
-                    mList.add(info);
-                }
-            }
-        }
-        if (mAdapter != null) {
-            mAdapter.notifyDataSetChanged();
-        }
-        updateTitle();
-        mPaginationController.updatePaginationIndicator();
-        updateView();
-        mPaginationController.queryUnreadSpiderInfo();
+        mSearchController.gotoFilterByCategory(mSelectedCategory);
     }
 }

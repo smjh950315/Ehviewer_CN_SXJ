@@ -3,6 +3,7 @@ package com.hippo.ehviewer.sync;
 import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -76,8 +77,12 @@ public class DownloadListInfosExecutor {
         });
     }
 
+    public void executeFilterByCategory(int category, @Nullable String label) {
+        service.execute(() -> filterDownloadsFromDatabase(label, category, false));
+    }
+
     @SuppressLint("NonConstantResourceId")
-    public void executeFilterAndSort(int id) {
+    public void executeFilterAndSort(int id, @Nullable String label) {
         service.execute(() -> {
             switch (id) {
 
@@ -120,11 +125,11 @@ public class DownloadListInfosExecutor {
                 case R.id.non_h:
                 case R.id.western:
                 case R.id.unknown:
-                    resultList = filterDownloadKind(id);
-                    break;
+                    filterDownloadsFromDatabase(label, kindValue(id), false);
+                    return;
                 case R.id.local_import:
-                    resultList = filterLocalImport();
-                    break;
+                    filterDownloadsFromDatabase(label, EhUtils.ALL_CATEGORY, true);
+                    return;
                 case R.id.all:
                 case R.id.sort_by_default:
                 default:
@@ -328,35 +333,25 @@ public class DownloadListInfosExecutor {
         return list;
     }
 
-    private List<DownloadInfo> filterDownloadKind(int state) {
-        int kind = kindValue(state);
-        List<DownloadInfo> list = new ArrayList<>();
-
-        if (mList == null) {
-            return null;
+    private void filterDownloadsFromDatabase(@Nullable String label, int category,
+            boolean localImportsOnly) {
+        try {
+            List<DownloadInfo> list = EhDB.queryDownloadInfoByCategory(
+                    label, category, localImportsOnly);
+            handler.post(() -> {
+                if (mDownloadSearchCallback != null) {
+                    mDownloadSearchCallback.onDownloadSearchSuccess(list);
+                }
+            });
+        } catch (RuntimeException e) {
+            Log.w(TAG, "Failed to query download category", e);
+            handler.post(() -> {
+                if (mDownloadSearchCallback != null) {
+                    mDownloadSearchCallback.onDownloadSearchFailed(
+                            mList != null ? mList : new ArrayList<>());
+                }
+            });
         }
-        if (kind == EhUtils.ALL_CATEGORY) {
-            return mList;
-        }
-        for(DownloadInfo info : mList){
-            if (info.category == kind) {
-                list.add(info);
-            }
-        }
-        return list;
-    }
-
-    private List<DownloadInfo> filterLocalImport() {
-        List<DownloadInfo> list = new ArrayList<>();
-        if (mList == null) {
-            return list;
-        }
-        for (DownloadInfo info : mList) {
-            if (info.archiveUri != null && !info.archiveUri.isEmpty()) {
-                list.add(info);
-            }
-        }
-        return list;
     }
 
 
@@ -591,6 +586,7 @@ public class DownloadListInfosExecutor {
             case R.id.cosplay -> EhConfig.COSPLAY;
             case R.id.asian_porn -> EhConfig.ASIAN_PORN;
             case R.id.misc -> EhConfig.MISC;
+            case R.id.unknown -> EhUtils.UNKNOWN;
             default -> EhUtils.ALL_CATEGORY;
         };
     }

@@ -70,6 +70,9 @@ public class DownloadSearchController implements SearchBar.Helper, SearchBarMove
         List<DownloadInfo> getBackList();
 
         @Nullable
+        String getLabel();
+
+        @Nullable
         DownloadManager getDownloadManager();
 
         void updateForLabel();
@@ -184,7 +187,19 @@ public class DownloadSearchController implements SearchBar.Helper, SearchBarMove
 
         executor.setDownloadSearchingListener(mHost.getDownloadSearchCallback());
 
-        executor.executeFilterAndSort(id);
+        executor.executeFilterAndSort(id, mHost.getLabel());
+    }
+
+    public void gotoFilterByCategory(int category) {
+        mHost.getProgressView().setVisibility(View.VISIBLE);
+        MyEasyRecyclerView recyclerView = mHost.getRecyclerView();
+        if (recyclerView != null) {
+            recyclerView.setVisibility(View.GONE);
+        }
+        DownloadListInfosExecutor executor = new DownloadListInfosExecutor(
+                mHost.getBackList(), mHost.getDownloadManager());
+        executor.setDownloadSearchingListener(mHost.getDownloadSearchCallback());
+        executor.executeFilterByCategory(category, mHost.getLabel());
     }
 
     @Override

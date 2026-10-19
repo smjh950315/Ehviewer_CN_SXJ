@@ -33,6 +33,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.hippo.ehviewer.client.EhUtils;
 import com.hippo.ehviewer.client.data.GalleryInfo;
 import com.hippo.ehviewer.client.data.ListUrlBuilder;
 import com.hippo.ehviewer.dao.BlackList;
@@ -462,6 +463,25 @@ public class EhDB {
         }
         list.get(start).setTime(toTime);
         dao.updateInTx(list);
+    }
+
+    /** Queries the current label without applying the startup download-state reset. */
+    public static synchronized List<DownloadInfo> queryDownloadInfoByCategory(
+            @Nullable String label, int category, boolean localImportsOnly) {
+        QueryBuilder<DownloadInfo> query = sDaoSession.getDownloadsDao().queryBuilder();
+        if (label == null) {
+            query.where(DownloadsDao.Properties.Label.isNull());
+        } else {
+            query.where(DownloadsDao.Properties.Label.eq(label));
+        }
+        if (category != EhUtils.ALL_CATEGORY) {
+            query.where(DownloadsDao.Properties.Category.eq(category));
+        }
+        if (localImportsOnly) {
+            query.where(DownloadsDao.Properties.ArchiveUri.isNotNull(),
+                    DownloadsDao.Properties.ArchiveUri.notEq(""));
+        }
+        return query.orderDesc(DownloadsDao.Properties.Time).list();
     }
 
     // Insert or update
