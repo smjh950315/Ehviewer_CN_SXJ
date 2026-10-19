@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.hippo.ehviewer.widget.FixedThumb
+            <com.hippo.ehviewer.widget.DownloadThumb
                 android:id="@+id/thumb"
                 android:layout_width="@dimen/gallery_list_thumb_width"
                 android:layout_height="@dimen/gallery_list_thumb_height"

@@ -43,7 +43,6 @@ import com.hippo.ehviewer.Analytics.recordException
 import com.hippo.ehviewer.EhDB
 import com.hippo.ehviewer.R
 import com.hippo.ehviewer.Settings
-import com.hippo.ehviewer.client.EhCacheKeyFactory
 import com.hippo.ehviewer.client.EhUtils.getCategory
 import com.hippo.ehviewer.client.EhUtils.getCategoryColor
 import com.hippo.ehviewer.client.EhUtils.getSuitableTitle
@@ -60,6 +59,7 @@ import com.hippo.ehviewer.ui.scene.download.DownloadsScene
 import com.hippo.ehviewer.ui.scene.download.part.DownloadAdapter.DownloadHolder
 import com.hippo.ehviewer.ui.scene.gallery.detail.GalleryDetailScene
 import com.hippo.ehviewer.ui.scene.gallery.list.EnterGalleryDetailTransaction
+import com.hippo.ehviewer.widget.DownloadThumb
 import com.hippo.ehviewer.widget.SimpleRatingView
 import com.hippo.lib.yorozuya.AssertUtils
 import com.hippo.lib.yorozuya.FileUtils
@@ -179,6 +179,7 @@ class DownloadAdapter(scene: DownloadsScene, callback: DownloadAdapterCallback) 
             val importedArchive = isImportedArchive(info)
             val localAlbum = DownloadAlbumImporter.isLocalAlbum(info)
             val localImport = importedArchive || localAlbum
+            holder.thumb.bindDownload(if (localImport) null else info)
             // Add special prefix for imported archives
             if (importedArchive) {
                 title = "📦 $title"
@@ -194,11 +195,6 @@ class DownloadAdapter(scene: DownloadsScene, callback: DownloadAdapterCallback) 
                 loadLocalAlbumThumbnail(holder.thumb, info)
             } else {
                 holder.thumb.setTag(R.id.thumb, null)
-                // Normal thumbnail loading for regular downloads
-                holder.thumb.load(
-                    EhCacheKeyFactory.getThumbKey(info.gid), info.thumb,
-                    ThumbDataContainer(info), true, false
-                )
             }
 
 
@@ -756,7 +752,7 @@ class DownloadAdapter(scene: DownloadsScene, callback: DownloadAdapterCallback) 
     inner class DownloadHolder(itemView: View) : AbstractDraggableItemViewHolder(itemView),
         View.OnClickListener {
         @JvmField
-        val thumb: LoadImageView
+        val thumb: DownloadThumb
         val title: TextView
         val uploader: TextView
         val rating: SimpleRatingView
@@ -770,7 +766,7 @@ class DownloadAdapter(scene: DownloadsScene, callback: DownloadAdapterCallback) 
         val speed: TextView
 
         init {
-            thumb = itemView.findViewById<LoadImageView>(R.id.thumb)
+            thumb = itemView.findViewById<DownloadThumb>(R.id.thumb)
             title = itemView.findViewById<TextView>(R.id.title)
             uploader = itemView.findViewById<TextView>(R.id.uploader)
             rating = itemView.findViewById<SimpleRatingView>(R.id.rating)
