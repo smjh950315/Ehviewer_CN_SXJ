@@ -27,6 +27,7 @@ import com.hippo.ehviewer.client.EhRequest
 import com.hippo.ehviewer.client.EhUrl
 import com.hippo.ehviewer.client.data.GalleryDetail
 import com.hippo.ehviewer.dao.DownloadInfo
+import com.hippo.ehviewer.sync.GalleryDetailTagsSyncTask
 import com.hippo.ehviewer.ui.scene.download.part.ThumbDataContainer
 
 /** Loads download covers lazily, refreshing missing or expired thumbnail URLs once per appearance. */
@@ -86,7 +87,10 @@ class DownloadThumb @JvmOverloads constructor(
                 override fun onSuccess(result: GalleryDetail) {
                     if (refreshRequest !== request || download !== info) return
                     refreshRequest = null
-                    if (result.gid != info.gid || result.thumb.isNullOrBlank()) return
+                    if (result.gid != info.gid) return
+
+                    GalleryDetailTagsSyncTask(result).start()
+                    if (result.thumb.isNullOrBlank()) return
 
                     info.thumb = result.thumb
                     EhDB.putDownloadInfo(info)
