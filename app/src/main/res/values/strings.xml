@@ -1095,4 +1095,16 @@
     <string name="import_album_success">Imported %d images successfully</string>
     <!-- TagSelectActivity -->
     <string name="tag_search_entrance">Tag Selector</string>
+    <string name="download_metadata_fetch">Fetch gallery metadata</string>
+    <string name="download_metadata_summary">Fetch gallery details and tags for all download labels in the background, up to 100 galleries per minute. Local imports are skipped.</string>
+    <string name="download_metadata_only_missing">Only galleries missing from the tag database</string>
+    <string name="download_metadata_only_missing_summary">Fetch only galleries whose GID has no tag database entry. Turn off to refresh all galleries.</string>
+    <string name="download_metadata_start">Start fetching</string>
+    <string name="download_metadata_stop">Stop fetching</string>
+    <string name="download_metadata_preparing">Finding galleries to fetch…</string>
+    <string name="download_metadata_running">Gallery metadata is being fetched in the background. You can follow its progress or stop it from the notification.</string>
+    <string name="download_metadata_progress">%1$d / %2$d processed · %3$d saved · %4$d failed</string>
+    <string name="download_metadata_complete">Gallery metadata fetch complete</string>
+    <string name="download_metadata_stopped">Gallery metadata fetch stopped</string>
+    <string name="download_metadata_error">Gallery metadata fetch could not finish</string>
 </resources>

@@ -253,6 +253,11 @@
             android:name=".download.ArchiverDownloadService"
             android:foregroundServiceType="dataSync"
             android:label="@string/archiver_download_service_label" />
+        <service
+            android:name=".download.DownloadMetadataService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync"
+            android:label="@string/download_metadata_fetch" />
 
         <provider
             android:name="com.hippo.content.FileProvider"

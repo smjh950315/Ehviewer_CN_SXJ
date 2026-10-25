@@ -31,6 +31,7 @@ import androidx.annotation.Nullable;
 import com.hippo.ehviewer.Analytics;
 import com.hippo.ehviewer.EhDB;
 import com.hippo.ehviewer.Settings;
+import com.hippo.ehviewer.client.data.GalleryDetail;
 import com.hippo.ehviewer.client.data.GalleryInfo;
 import com.hippo.ehviewer.dao.DownloadInfo;
 import com.hippo.ehviewer.dao.DownloadLabel;
@@ -266,6 +267,32 @@ public class DownloadManager implements SpiderQueen.OnSpiderListener {
     @Nullable
     public DownloadInfo getDownloadInfo(long gid) {
         return mAllInfoMap.get(gid);
+    }
+
+    /** Called on the main thread after refreshed tags have been saved. */
+    public void updateGalleryMetadata(@NonNull GalleryDetail detail) {
+        DownloadInfo info = getDownloadInfo(detail.gid);
+        // The download may have been removed while its metadata was being fetched.
+        if (info == null) {
+            return;
+        }
+        info.title = detail.title;
+        info.titleJpn = detail.titleJpn;
+        if (detail.thumb != null && !detail.thumb.isEmpty()) {
+            info.thumb = detail.thumb;
+        }
+        info.category = detail.category;
+        info.posted = detail.posted;
+        info.uploader = detail.uploader;
+        info.rating = detail.rating;
+        // Offline search must read the refreshed database tags rather than an older list cache.
+        info.simpleTags = null;
+        info.tgList = null;
+        info.generateSLang();
+        EhDB.putDownloadInfo(info);
+        for (DownloadInfoListener listener : mDownloadInfoListeners) {
+            listener.onUpdate(info, getInfoListForLabel(info.label), mWaitList);
+        }
     }
 
     @Nullable

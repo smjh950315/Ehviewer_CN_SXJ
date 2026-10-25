@@ -70,6 +70,7 @@ import com.hippo.ehviewer.client.EhConfig;
 import com.hippo.ehviewer.client.EhUtils;
 import com.hippo.ehviewer.dao.DownloadInfo;
 import com.hippo.ehviewer.download.DownloadManager;
+import com.hippo.ehviewer.download.DownloadMetadataService;
 import com.hippo.ehviewer.download.DownloadService;
 import com.hippo.ehviewer.event.SomethingNeedRefresh;
 import com.hippo.ehviewer.spider.SpiderInfo;
@@ -653,6 +654,9 @@ public class DownloadsScene extends ToolbarScene
                         }).show();
                 return true;
             }
+            case R.id.action_fetch_download_metadata:
+                DownloadMetadataService.showDialog(activity);
+                return true;
             case R.id.search_download_gallery: {
                 Context context = getEHContext();
                 if (context == null) {

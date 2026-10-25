@@ -36,6 +36,7 @@ import com.hippo.ehviewer.R;
 import com.hippo.ehviewer.Settings;
 import com.hippo.ehviewer.client.data.GalleryInfo;
 import com.hippo.ehviewer.download.DownloadManager;
+import com.hippo.ehviewer.download.DownloadMetadataService;
 import com.hippo.ehviewer.ui.CommonOperations;
 import com.hippo.ehviewer.ui.DirPickerActivity;
 import com.hippo.unifile.UniFile;
@@ -66,6 +67,7 @@ public class DownloadFragment extends PreferenceFragmentCompat implements
     public static final String KEY_EXPORT_DOWNLOAD_ITEMS = "export_download_items";
     public static final String KEY_IMPORT_DOWNLOAD_ITEMS = "import_download_items";
     public static final String KEY_CLEAN_INVALID_DOWNLOAD = "clean_invalid_download";
+    private static final String KEY_FETCH_DOWNLOAD_METADATA = "fetch_download_metadata";
 
     @Nullable
     private Preference mDownloadLocation;
@@ -82,6 +84,7 @@ public class DownloadFragment extends PreferenceFragmentCompat implements
         Preference exportDownloadItems = findPreference(KEY_EXPORT_DOWNLOAD_ITEMS);
         Preference importDownloadItems = findPreference(KEY_IMPORT_DOWNLOAD_ITEMS);
         Preference cleanInvalidDownload = findPreference(KEY_CLEAN_INVALID_DOWNLOAD);
+        Preference fetchDownloadMetadata = findPreference(KEY_FETCH_DOWNLOAD_METADATA);
         Preference preloadImage = findPreference("preload_image");
         Preference imageResolutionPref = findPreference(Settings.KEY_IMAGE_RESOLUTION);
 
@@ -128,6 +131,9 @@ public class DownloadFragment extends PreferenceFragmentCompat implements
         if (cleanInvalidDownload != null) {
             cleanInvalidDownload.setOnPreferenceClickListener(this);
         }
+        if (fetchDownloadMetadata != null) {
+            fetchDownloadMetadata.setOnPreferenceClickListener(this);
+        }
     }
 
     @Override
@@ -165,6 +171,9 @@ public class DownloadFragment extends PreferenceFragmentCompat implements
             return true;
         } else if (KEY_IMPORT_DOWNLOAD_ITEMS.equals(key)) {
             importDownloadItems();
+            return true;
+        } else if (KEY_FETCH_DOWNLOAD_METADATA.equals(key)) {
+            DownloadMetadataService.showDialog(requireActivity());
             return true;
         } else if (KEY_CLEAN_INVALID_DOWNLOAD.equals(key)) {
             new AlertDialog.Builder(requireActivity())

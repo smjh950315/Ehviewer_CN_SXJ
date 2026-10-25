@@ -829,6 +829,16 @@ public class Settings {
         putBoolean(KEY_SYNC_DOWNLOAD_WHILE_READING, value);
     }
 
+    public static final String KEY_DOWNLOAD_METADATA_ONLY_MISSING = "download_metadata_only_missing";
+
+    public static boolean getDownloadMetadataOnlyMissing() {
+        return getBoolean(KEY_DOWNLOAD_METADATA_ONLY_MISSING, true);
+    }
+
+    public static void putDownloadMetadataOnlyMissing(boolean value) {
+        putBoolean(KEY_DOWNLOAD_METADATA_ONLY_MISSING, value);
+    }
+
     private static final String KEY_RECENT_DOWNLOAD_LABEL = "recent_download_label";
     private static final String DEFAULT_RECENT_DOWNLOAD_LABEL = null;
 

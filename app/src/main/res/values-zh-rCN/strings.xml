@@ -1006,4 +1006,16 @@
     <string name="import_album_already_imported">相册已导入</string>
     <string name="import_album_success">成功导入 %d 张图片</string>
 
+    <string name="download_metadata_fetch">获取画廊元数据</string>
+    <string name="download_metadata_summary">在后台获取所有下载标签下的画廊信息和标签，每分钟最多 100 个画廊。跳过本地导入的项目。</string>
+    <string name="download_metadata_only_missing">仅获取标签数据库中缺失的画廊</string>
+    <string name="download_metadata_only_missing_summary">仅获取 GID 不在标签数据库中的画廊。关闭后刷新所有画廊。</string>
+    <string name="download_metadata_start">开始获取</string>
+    <string name="download_metadata_stop">停止获取</string>
+    <string name="download_metadata_preparing">正在查找需要获取的画廊…</string>
+    <string name="download_metadata_running">正在后台获取画廊元数据。可在通知中查看进度或停止。</string>
+    <string name="download_metadata_progress">已处理 %1$d / %2$d · 已保存 %3$d · 失败 %4$d</string>
+    <string name="download_metadata_complete">画廊元数据获取完成</string>
+    <string name="download_metadata_stopped">画廊元数据获取已停止</string>
+    <string name="download_metadata_error">未能完成画廊元数据获取</string>
 </resources>

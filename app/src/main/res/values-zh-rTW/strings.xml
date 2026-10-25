@@ -1011,4 +1011,16 @@
     <string name="dummy_button">虛擬按鈕</string>
     <string name="dummy_content">虛擬\n內容</string>
 
+    <string name="download_metadata_fetch">取得圖庫中繼資料</string>
+    <string name="download_metadata_summary">在背景取得所有下載分類中的圖庫資訊與標籤，每分鐘最多 100 個圖庫。略過本機匯入的項目。</string>
+    <string name="download_metadata_only_missing">僅取得標籤資料庫中缺少的圖庫</string>
+    <string name="download_metadata_only_missing_summary">僅取得 GID 不在標籤資料庫中的圖庫。關閉後更新所有圖庫。</string>
+    <string name="download_metadata_start">開始取得</string>
+    <string name="download_metadata_stop">停止取得</string>
+    <string name="download_metadata_preparing">正在尋找需要取得資料的圖庫…</string>
+    <string name="download_metadata_running">正在背景取得圖庫中繼資料。可在通知中查看進度或停止。</string>
+    <string name="download_metadata_progress">已處理 %1$d / %2$d · 已儲存 %3$d · 失敗 %4$d</string>
+    <string name="download_metadata_complete">圖庫中繼資料取得完成</string>
+    <string name="download_metadata_stopped">已停止取得圖庫中繼資料</string>
+    <string name="download_metadata_error">無法完成圖庫中繼資料取得作業</string>
 </resources>

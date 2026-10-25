@@ -16,15 +16,22 @@ class GalleryDetailTagsSyncTask(val detail: GalleryDetail) : Thread() {
 
     override fun run() {
         super.run()
-        val galleryTags = this.tags
         try {
+            save()
+        } catch (e: Exception) {
+            Log.e(TAG, e.toString())
+        }
+    }
+
+    /** Saves synchronously on the caller's worker thread, propagating database failures. */
+    fun save() {
+        val galleryTags = this.tags
+        synchronized(EhDB::class.java) {
             if (EhDB.inGalleryTags(detail.gid)) {
                 EhDB.updateGalleryTags(galleryTags)
             } else {
                 EhDB.insertGalleryTags(galleryTags)
             }
-        } catch (e: Exception) {
-            Log.e(TAG, e.toString())
         }
     }
 
